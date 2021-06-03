@@ -43,7 +43,7 @@ if len(failed) > 0:
     print("Following cameras have triggered alarm")
     for cam in failed:
         print(cam)
-    exit(1)
+    exit(2)
 else:
     print("All cameras active. Stats for last "+str(recordings_delta_hours)+"h")
     for cam in stats:
