@@ -3,13 +3,13 @@ import argparse
 from unifi_video import UnifiVideoAPI
 from datetime import datetime, timedelta
 
-recordings_delta_hours = 24
-recordings_expected = 10
 parser = argparse.ArgumentParser()
 parser.add_argument('--server', help='IP/Hostname of server', required=True)
 parser.add_argument('--apikey', help='API Key', required=True)
 parser.add_argument('--port', help='Port to connect to', default=7080)
 parser.add_argument('--schema', help='http/https', default="http")
+parser.add_argument('--expected', help='Expected number of recordings', default=10)
+parser.add_argument('--timespan', help='Search in last X hours of recordings', default=24)
 
 args = parser.parse_args()
 uva = UnifiVideoAPI(
@@ -18,6 +18,9 @@ uva = UnifiVideoAPI(
     port=args.port,
     schema=args.schema
 )
+
+recordings_delta_hours = args.timespan
+recordings_expected = args.expected
 
 failed = []
 stats = []
