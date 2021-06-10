@@ -1,0 +1,32 @@
+---
+kind: pipeline
+name: default
+steps:
+  - name: docker
+    image: plugins/docker
+    settings:
+      username: veselahouba
+      password:
+        from_secret: VH_DOCKER_PASSWORD
+      repo: veselahouba/${DRONE_REPO_NAME/_/-}
+      auto_tag: true
+
+  - name: Slack notification
+    image: plugins/slack
+    settings:
+      webhook:
+        from_secret: slack_webhook
+      channel: ci-cd
+      template: >
+        {{#success build.status}}
+          Publish for `{{repo.name}}/{{build.event}}` succeeded.
+          {{build.link}}
+          Note that untagged builds are skipped (except master)
+        {{else}}
+          Publish for `{{repo.name}}/{{build.event}}` failed.
+          {{build.link}}
+        {{/success}}
+    when:
+      status:
+        - success
+        - failure
