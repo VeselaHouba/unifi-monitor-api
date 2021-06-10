@@ -19,14 +19,16 @@ steps:
       channel: ci-cd
       template: >
         {{#success build.status}}
-          Publish for `{{repo.name}}/{{build.event}}` succeeded.
+          Publish for `{{repo.name}}/{{build.ref}}` succeeded.
           {{build.link}}
-          Note that untagged builds are skipped (except master)
         {{else}}
-          Publish for `{{repo.name}}/{{build.event}}` failed.
+          Publish for `{{repo.name}}/{{build.ref}}` failed.
           {{build.link}}
         {{/success}}
     when:
+      ref:
+        - refs/heads/master
+        - refs/tags/*
       status:
         - success
         - failure
