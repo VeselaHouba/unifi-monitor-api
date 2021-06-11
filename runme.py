@@ -19,8 +19,8 @@ uva = UnifiVideoAPI(
     schema=args.schema
 )
 
-recordings_delta_hours = args.timespan
-recordings_expected = args.expected
+recordings_delta_hours = int(args.timespan)
+recordings_expected = int(args.expected)
 
 failed = []
 stats = []
