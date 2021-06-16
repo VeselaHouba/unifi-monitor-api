@@ -10,6 +10,7 @@ parser.add_argument('--port', help='Port to connect to', default=7080)
 parser.add_argument('--schema', help='http/https', default="http")
 parser.add_argument('--expected', help='Expected number of recordings', default=10)
 parser.add_argument('--timespan', help='Search in last X hours of recordings', default=24)
+parser.add_argument('--managed', help='Check only managed cameras', action="store_true")
 
 args = parser.parse_args()
 uva = UnifiVideoAPI(
@@ -24,11 +25,15 @@ recordings_expected = int(args.expected)
 
 failed = []
 stats = []
+if args.managed:
+  cams = uva.managed_cameras
+else:
+  cams = uva.cameras
 active = uva.active_cameras
 now = datetime.today()
 delta = now - timedelta(hours=recordings_delta_hours)
 
-for camera in uva.cameras:
+for camera in cams:
     if camera in active:
         recordings = uva.get_recordings(
             camera=camera,
